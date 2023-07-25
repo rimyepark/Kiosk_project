@@ -3,28 +3,37 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('OrderItems', {
-      id: {
+      orderItemId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      itemId: {
-        type: Sequelize.INTEGER
+      ItemId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references:{
+          model:'Items',
+          key:'itemId',
+        },
       },
       amount: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       state: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn("now")
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn("now")
       }
     });
   },

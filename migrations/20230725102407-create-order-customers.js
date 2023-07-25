@@ -2,33 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Options', {
-      id: {
+    await queryInterface.createTable('OrderCustomers', {
+      orderCustomerId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      extraPrice: {
-        type: Sequelize.INTEGER
-      },
-      shotPrice: {
-        type: Sequelize.INTEGER
-      },
-      hot: {
+      state: {
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn("now")
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn("now")
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Options');
+    await queryInterface.dropTable('OrderCustomers');
   }
 };
