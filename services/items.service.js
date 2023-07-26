@@ -1,10 +1,9 @@
-
 const itemRepository = require('../repositories/items.repository');
 
 class ItemsService {
     ItemRepository = new itemRepository();
 
-  findAllItem = async () => {
+    findAllItem = async() => {
   
     const allItem = await this.ItemRepository.findAllItem();
 
@@ -13,6 +12,7 @@ class ItemsService {
       return {
         itemId: item.itemId,
         name: item.name,
+        OptionId: item.OptionId,
         price: item.price,
         type: item.type,
         amount: item.amount
@@ -20,9 +20,9 @@ class ItemsService {
     });
   }
 
-  createItem = async (name,optionId,price,type,amount) => {
+  createItem = async (name,OptionId,price,type,amount) => {
   
-    const CreateItemData = await this.itemRepository.createItem(name,optionId,price,type,amount);
+    const CreateItemData = await this.ItemRepository.createItem(name,OptionId,price,type,amount);
 
     if (!name) {
       throw new Error('상품 이름을 입력해주세요');
@@ -42,7 +42,7 @@ class ItemsService {
     return {
       itemId: CreateItemData.itemId,
       name: CreateItemData.name,
-      optionId: CreateItemData.optionId,
+      OptionId: CreateItemData.OptionId,
       price: CreateItemData.price,
       type: CreateItemData.type,
       amount: CreateItemData.amount,

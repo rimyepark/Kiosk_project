@@ -1,17 +1,17 @@
 
-const { items } = require('../models');
+const { Items } = require('../models');
 
 class itemRepository {
   findAllItem = async () => {
 
-    const Items = await items.findAll();
+    const items = await Items.findAll();
 
-    return Items;
+    return items;
   }
 
-  createItem = async (name,optionId,price,type,amount) => {
+  createItem = async (name,OptionId,price,type,amount) => {
 
-    const createItem = await items.create({ name,optionId,price,type,amount });
+    const createItem = await Items.create({ name,OptionId,price,type,amount });
 
     return createItem;
   }
