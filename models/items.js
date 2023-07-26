@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.ENUM('Coffee', 'Beverage','Tea', 'Cake', 'Cookie') // ENUM 타입으로 정의합니다.
     },
     amount: {
       allowNull: false,

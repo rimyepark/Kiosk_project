@@ -28,7 +28,7 @@ module.exports = {
       },
       type: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('Coffee', 'Beverage','Tea', 'Cake', 'Cookie') // "type" 컬럼으로 ENUM 타입을 사용합니다.
       },
       amount: {
         allowNull: false,

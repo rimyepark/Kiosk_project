@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-         this.hasOne(models.ItemOrderCustomers, { // 1:1 관계 설정을 합니다.
+         this.hasMany(models.ItemOrderCustomers, { // 1:1 관계 설정을 합니다.
               sourceKey: 'orderCustomerId', 
               foreignKey: 'OrderCustomerId', 
             });
