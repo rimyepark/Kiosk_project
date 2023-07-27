@@ -21,6 +21,15 @@ class itemRepository {
     return createItem;
   }
 
+  updateItem = async (itemId,name,OptionId,price,type,amount) => {
+    const updateItemData = await Items.update(
+      { name,OptionId,price,type,amount },
+      { where: { itemId } }
+    );
+
+    return updateItemData;
+  };
+
   deleteItem = async (itemId) => {
     const deleteItemData = await Items.destroy({ where: { itemId } });
 

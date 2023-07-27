@@ -3,11 +3,8 @@ const itemRepository = require('../repositories/items.repository');
 class ItemsService {
     ItemRepository = new itemRepository();
 
-    findAllItem = async() => {
-  
+    findAllItem = async() => { 
     const allItem = await this.ItemRepository.findAllItem();
-
-
     return allItem.map(item => {
       return {
         itemId: item.itemId,
@@ -21,9 +18,7 @@ class ItemsService {
   }
 
   createItem = async (name,OptionId,price,type,amount) => {
-  
     const CreateItemData = await this.ItemRepository.createItem(name,OptionId,price,type,amount);
-
     if (!name) {
       throw new Error('상품 이름을 입력해주세요');
     }
@@ -49,10 +44,26 @@ class ItemsService {
     };
   }
 
+  updateItem = async (itemId,name,OptionId,price,type,amount) => {
+    const findItem = await this.ItemRepository.findItemById(itemId);
+    if (!findItem) throw new Error("아이템을 찾지 못하였습니다.");
+    
+    await this.ItemRepository.updateItem(itemId, name,OptionId,price,type,amount);
+    
+    const updateItem = await this.ItemRepository.findItemById(itemId);
+    
+    return {
+      itemId: updateItem.itemId,
+      name: updateItem.name,
+      price: updateItem.price,
+      type: updateItem.type,
+      amount: updateItem.amount,
+    };
+  };
+
   deleteItem  = async (itemId) => {
     const findItem = await this.ItemRepository.findItemById(itemId);
     if (!findItem) throw new Error("아이템을 찾을 수 없습니다.");
-
     await this.ItemRepository.deleteItem(itemId);
 
     return {

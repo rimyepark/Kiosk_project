@@ -11,12 +11,24 @@ class OptionsController {
 //   extraPrice,shotPrice,hot,createdAt,updatedAt
 createOption = async (req, res, next) => {
     const { extraPrice,shotPrice,hot } = req.body;
-
-    // 서비스 계층에 구현된 createPost 로직을 실행합니다.
     const createOptionDate = await this.optionsService.createOption(extraPrice,shotPrice,hot);
 
     res.status(201).json({ data: createOptionDate });
   }
+
+  updateOption = async (req, res, next) => {
+    const { optionId } = req.params;
+    const { extraPrice,shotPrice,hot } = req.body;
+
+    const updateOption = await this.optionsService.updateOption(
+      optionId,
+      extraPrice,
+      shotPrice,
+      hot
+    );
+
+    res.status(200).json({ data: updateOption });
+  };
 
   deleteOption = async (req, res, next) => {
     const { optionId } = req.params;

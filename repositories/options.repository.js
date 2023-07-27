@@ -20,7 +20,15 @@ class optionRepository {
 
     return createOption;
   }
+ 
+  updateOption = async (optionId, extraPrice,shotPrice,hot) => {
+    const updateOptionData = await Options.update(
+      { extraPrice,shotPrice,hot },
+      { where: { optionId } }
+    );
 
+    return updateOptionData;
+  };
   
   deleteOption = async (optionId) => {
     const deleteOptionData = await Options.destroy({ where: { optionId } });

@@ -6,7 +6,7 @@ const optionsController = new OptionsController();
 
 router.get('/options', optionsController.getOptions);
 router.post('/options', optionsController.createOption);
-
+router.put('/options/:optionId', optionsController.updateOption);
 router.delete('/options/:optionId', optionsController.deleteOption);
 
 module.exports = router;
