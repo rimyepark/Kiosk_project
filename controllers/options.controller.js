@@ -2,13 +2,15 @@ const OptionsService = require('../services/options.service');
 
 class OptionsController {
     optionsService = new OptionsService();
-  getOptions = async (req, res, next) => {
 
+    // 옵션 조회 api
+  getOptions = async (req, res, next) => {
     const Options = await this.optionsService.findAllOption();
 
     res.status(200).json({ data: Options })
   }
-//   extraPrice,shotPrice,hot,createdAt,updatedAt
+
+// 옵션 생성 api
 createOption = async (req, res, next) => {
     const { extraPrice,shotPrice,hot } = req.body;
     const createOptionDate = await this.optionsService.createOption(extraPrice,shotPrice,hot);
@@ -16,6 +18,7 @@ createOption = async (req, res, next) => {
     res.status(201).json({ data: createOptionDate });
   }
 
+  //옵션 수정 api
   updateOption = async (req, res, next) => {
     const { optionId } = req.params;
     const { extraPrice,shotPrice,hot } = req.body;
@@ -30,9 +33,9 @@ createOption = async (req, res, next) => {
     res.status(200).json({ data: updateOption });
   };
 
+//옵션 삭제 api
   deleteOption = async (req, res, next) => {
     const { optionId } = req.params;
-
     const deleteOption = await this.optionsService.deleteOption(optionId);
 
     res.status(200).json({ data: deleteOption });

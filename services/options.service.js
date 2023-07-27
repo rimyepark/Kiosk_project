@@ -4,6 +4,7 @@ class OptionsService {
 
     OptionRepository = new optionRepository();
 
+    //옵션 조회 api
     findAllOption = async() => { 
     const allOption = await this.OptionRepository.findAllOption();
     return allOption.map(option => {
@@ -18,6 +19,7 @@ class OptionsService {
     });
   }
 
+  //옵션 생성 api
   createOption = async (extraPrice,shotPrice,hot) => {  
    const CreateOptionData = await this.OptionRepository.createOption(extraPrice,shotPrice,hot);
     return {
@@ -28,6 +30,7 @@ class OptionsService {
     };
   }
 
+  //옵션 수정 api
   updateOption = async (optionId, extraPrice,shotPrice,hot) => {
     const findOption = await this.OptionRepository.findOptionById(optionId);
     if (!findOption) throw new Error("옵션을 찾지 못하였습니다.");
@@ -44,6 +47,7 @@ class OptionsService {
     };
   };
 
+  //옵션 삭제 api
   deleteOption = async (optionId) => {
     const findOption = await this.OptionRepository.findOptionById(optionId);
     if (!findOption) throw new Error("옵션을 찾을 수 없습니다.");

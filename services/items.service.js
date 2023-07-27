@@ -2,9 +2,16 @@ const itemRepository = require('../repositories/items.repository');
 
 class ItemsService {
     ItemRepository = new itemRepository();
-
+// 'Coffee', 'Beverage','Tea', 'Cake', 'Cookie'
     findAllItem = async() => { 
-    const allItem = await this.ItemRepository.findAllItem();
+      const type  = {
+        "Coffee": "Coffee",
+        "Beverage": "Beverage",
+        "Tea": "Tea",
+        "Cake": "Cake",
+        "Cookie": "Cookie",
+      };
+    const allItem = await this.ItemRepository.findAllItem( type ? { type } : {});
     return allItem.map(item => {
       return {
         itemId: item.itemId,
@@ -51,6 +58,15 @@ class ItemsService {
     await this.ItemRepository.updateItem(itemId, name,OptionId,price,type,amount);
     
     const updateItem = await this.ItemRepository.findItemById(itemId);
+
+    if (!name) {
+      throw new Error('상품의 이름을 입력해주세요');
+    }
+
+    if (amount<=0) {
+      throw new Error('알맞은 가격을 입력해주세요');
+    }
+    
     
     return {
       itemId: updateItem.itemId,
@@ -61,11 +77,56 @@ class ItemsService {
     };
   };
 
-  deleteItem  = async (itemId) => {
+  deleteItem = async (itemId) => {
     const findItem = await this.ItemRepository.findItemById(itemId);
-    if (!findItem) throw new Error("아이템을 찾을 수 없습니다.");
+  
+    if (!findItem) {
+      throw new Error("아이템을 찾을 수 없습니다.");
+    }
+  
+    if (findItem.amount > 0) {
+      // 사용자 입력을 받기 위한 함수 정의
+      const askConfirmation = () => {
+        const readline = require('readline');
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout,
+        });
+  
+        rl.question('수량이 남아있습니다. 정말 삭제하시겠습니까? (yes/no): ', (answer) => {
+          rl.close();
+  
+          if (answer.toLowerCase() === 'yes') {
+            // 사용자가 'yes'를 입력하면 아이템을 삭제합니다.
+            this.ItemRepository.deleteItem(itemId)
+              .then(() => {
+                console.log('아이템이 삭제되었습니다.');
+              })
+              .catch((error) => {
+                console.error('삭제 중 오류가 발생했습니다.', error);
+              });
+          } else if (answer.toLowerCase() === 'no') {
+            // 사용자가 'no'를 입력하면 삭제를 취소합니다.
+            console.log('삭제를 취소합니다.');
+          } else {
+            // 유효하지 않은 입력일 경우 다시 물어봅니다.
+            console.log('올바른 값을 입력하세요 (yes 또는 no).');
+            askConfirmation();
+          }
+        });
+      };
+  
+      // 사용자 입력 함수 호출
+      askConfirmation();
+  
+      // 삭제 여부를 묻고 나면 해당 프로미스를 리턴하지 않고 바로 함수를 종료합니다.
+      // 콘솔에서 작업을 진행할 때 사용자 입력을 기다리는 동안 블로킹하지 않기 위함입니다.
+      return;
+    }
+  
+    // 수량이 없으면 바로 삭제합니다.
     await this.ItemRepository.deleteItem(itemId);
-
+  
     return {
       itemId: findItem.itemId,
       name: findItem.name,
@@ -73,8 +134,8 @@ class ItemsService {
       price: findItem.price,
       type: findItem.type,
       amount: findItem.amount,
+    };
   };
-}
 }
 
 module.exports = ItemsService;
