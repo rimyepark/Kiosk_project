@@ -16,7 +16,18 @@ class ItemsController {
     const createItemDate = await this.itemsService.createItem(name,OptionId,price,type,amount);
 
     res.status(201).json({ data: createItemDate });
-  }
+  };
+
+  deleteItem = async (req, res, next) => {
+    const { itemId } = req.params;
+
+    const deleteItem = await this.itemsService.deleteItem(itemId);
+    res.status(200).json({ data: deleteItem });
+
+   
+  };
+
+
 }
 
 module.exports = ItemsController;

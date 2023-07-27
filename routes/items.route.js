@@ -7,4 +7,5 @@ const itemsController = new ItemsController();
 router.get('/items', itemsController.getItems);
 router.post('/items', itemsController.createItem);
 
+router.delete('/items/:itemId', itemsController.deleteItem);
 module.exports = router;

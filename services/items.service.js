@@ -48,6 +48,22 @@ class ItemsService {
       amount: CreateItemData.amount,
     };
   }
+
+  deleteItem  = async (itemId) => {
+    const findItem = await this.ItemRepository.findItemById(itemId);
+    if (!findItem) throw new Error("아이템을 찾을 수 없습니다.");
+
+    await this.ItemRepository.deleteItem(itemId);
+
+    return {
+      itemId: findItem.itemId,
+      name: findItem.name,
+      OptionId: findItem.OptionId,
+      price: findItem.price,
+      type: findItem.type,
+      amount: findItem.amount,
+  };
+}
 }
 
 module.exports = ItemsService;
