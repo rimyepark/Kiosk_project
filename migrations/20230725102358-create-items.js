@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       name: {
         allowNull: false,
@@ -15,7 +15,7 @@ module.exports = {
       },
       OptionId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         references:{
           model:'Options',
           key:'optionId',
@@ -24,16 +24,16 @@ module.exports = {
       },
       price: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       type: {
         allowNull: false,
-        type: Sequelize.ENUM('Coffee', 'Beverage','Tea', 'Cake', 'Cookie') // "type" 컬럼으로 ENUM 타입을 사용합니다.
+        type: Sequelize.ENUM('Coffee', 'ade','Tea', 'Cake', 'Cookie') // "type" 컬럼으로 ENUM 타입을 사용합니다.
       },
       amount: {
         allowNull: false,
         defaultValue: 0,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       createdAt: {
         allowNull: false,

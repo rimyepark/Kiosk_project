@@ -23,15 +23,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     extraPrice: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     shotPrice: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     hot: {
       allowNull: false,

@@ -7,11 +7,11 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       ItemId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         references:{
           model:'Items',
           key:'itemId',
@@ -19,11 +19,12 @@ module.exports = {
       },
       amount: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       state: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        defaultValue: 0,
+        type: Sequelize.BIGINT 
       },
       createdAt: {
         allowNull: false,

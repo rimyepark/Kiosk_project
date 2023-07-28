@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.ItemOrderCustomers, { // 1:1 관계 설정을 합니다.
+      this.hasMany(models.ItemOrderCustomers, { // 1:1 관계 설정을 합니다.
         sourceKey: 'itemId', 
         foreignKey: 'ItemId', 
       });
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     name: {
       allowNull: false,
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     OptionId: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references:{
         model:'Options',
         key:'optionId',
@@ -49,16 +49,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     type: {
       allowNull: false,
-      type: DataTypes.ENUM('Coffee', 'Beverage','Tea', 'Cake', 'Cookie') // ENUM 타입으로 정의합니다.
+      type: DataTypes.ENUM('Coffee', 'ade','Tea', 'Cake', 'Cookie') // ENUM 타입으로 정의합니다.
     },
     amount: {
       allowNull: false,
       defaultValue: 0,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     createdAt: {
       allowNull: false, // NOT NULL

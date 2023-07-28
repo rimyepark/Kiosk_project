@@ -11,7 +11,7 @@ class ItemsController {
 
   createItem = async (req, res, next) => {
     const { name,OptionId,price,type,amount } = req.body;
-    // 'Coffee', 'Beverage','Tea', 'Cake', 'Cookie'
+    // 'Coffee', 'ade','Tea', 'Cake', 'Cookie'
     const createItemDate = await this.itemsService.createItem(name,OptionId,price,type,amount);
     res.status(201).json({ data: createItemDate });
   };

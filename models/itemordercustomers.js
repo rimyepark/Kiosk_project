@@ -26,11 +26,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     ItemId: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references:{
         model:'Items',
         key:'itemId',
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     OrderCustomerId: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references:{
         model:'OrderCustomers',
         key:'orderCustomerId',
@@ -46,7 +46,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     amount: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
+    },
+    option: {
+      allowNull: false,
+      type: DataTypes.JSON
+    },
+    price: {
+      allowNull: false,
+      type: DataTypes.BIGINT
     },
     createdAt: {
       allowNull: false, // NOT NULL

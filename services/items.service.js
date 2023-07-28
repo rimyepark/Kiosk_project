@@ -2,11 +2,11 @@ const itemRepository = require('../repositories/items.repository');
 
 class ItemsService {
     ItemRepository = new itemRepository();
-// 'Coffee', 'Beverage','Tea', 'Cake', 'Cookie'
+// 'Coffee', 'ade','Tea', 'Cake', 'Cookie'
     findAllItem = async() => { 
       const type  = {
         "Coffee": "Coffee",
-        "Beverage": "Beverage",
+        "ade": "ade",
         "Tea": "Tea",
         "Cake": "Cake",
         "Cookie": "Cookie",
@@ -36,7 +36,7 @@ class ItemsService {
     }
 
     // 알맞은 타입이 아닐 경우
-    const validTypes = ['Coffee', 'Beverage', 'Tea', 'Cake', 'Cookie'];
+    const validTypes = ['Coffee', 'ade', 'Tea', 'Cake', 'Cookie'];
     if (!validTypes.includes(type)) {
       throw new Error('알맞은 타입을 지정해주세요');
     }

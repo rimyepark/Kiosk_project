@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     ItemId: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references:{
         model:'Items',
         key:'itemId',
@@ -36,11 +36,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     amount: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.BIGINT
     },
     state: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      defaultValue: 0,
+      type: DataTypes.BIGINT
     },
     createdAt: {
       allowNull: false, // NOT NULL
@@ -56,5 +57,24 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'OrderItems',
   });
+
+ // state 값에 해당하는 문자열을 정의.
+const states = {
+  ORDERED: 0,
+  PENDING: 1,
+  COMPLETED: 2,
+  CANCELED: 3
+};
+
+// state 값을 문자열로 변환하는 가상 필드를 추가.
+Order.prototype.getState = function () {
+  return Object.keys(states).find(key => states[key] === this.state);
+};
+
+// state 값을 숫자로 설정하는 가상 필드를 추가.
+Order.prototype.setState = function (stateString) {
+  this.state = states[stateString];
+};
+
   return OrderItems;
 };
