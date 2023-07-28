@@ -19,6 +19,15 @@ module.exports = (sequelize, DataTypes) => {
       
     }
   }
+
+  const orderItemState = {
+    "ORDERED": 0,
+    "PENDING": 1,
+    "COMPLETED": 2,
+    "CANCELED": 3
+  };  
+
+
   OrderItems.init({
     orderItemId: {
       allowNull: false,
@@ -40,8 +49,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     state: {
       allowNull: false,
-      defaultValue: 0,
-      type: DataTypes.BIGINT
+      type: DataTypes.ENUM('ORDERED', 'PENDING', 'COMPLETED', 'CANCELED'),
+      defaultValue: 'ORDERED',
+      get() {
+        const rawValue = this.getDataValue('state');
+        return orderItemState[rawValue];
+      },
+      set(value) {
+        const matchingKey = Object.keys(orderItemState).find((key) => orderItemState[key] === value);
+        this.setDataValue('state', matchingKey);
+      }
+
     },
     createdAt: {
       allowNull: false, // NOT NULL
@@ -58,23 +76,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'OrderItems',
   });
 
- // state 값에 해당하는 문자열을 정의.
-const states = {
-  ORDERED: 0,
-  PENDING: 1,
-  COMPLETED: 2,
-  CANCELED: 3
-};
-
-// state 값을 문자열로 변환하는 가상 필드를 추가.
-Order.prototype.getState = function () {
-  return Object.keys(states).find(key => states[key] === this.state);
-};
-
-// state 값을 숫자로 설정하는 가상 필드를 추가.
-Order.prototype.setState = function (stateString) {
-  this.state = states[stateString];
-};
+ 
 
   return OrderItems;
 };

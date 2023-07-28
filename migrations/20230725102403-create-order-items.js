@@ -23,8 +23,8 @@ module.exports = {
       },
       state: {
         allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.BIGINT 
+        type: Sequelize.ENUM('ORDERED', 'PENDING', 'COMPLETED', 'CANCELED'),
+        defaultValue: 'ORDERED'
       },
       createdAt: {
         allowNull: false,
