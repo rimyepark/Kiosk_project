@@ -50,16 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     state: {
       allowNull: false,
       type: DataTypes.ENUM('ORDERED', 'PENDING', 'COMPLETED', 'CANCELED'),
-      defaultValue: 'ORDERED',
-      get() {
-        const rawValue = this.getDataValue('state');
-        return orderItemState[rawValue];
-      },
-      set(value) {
-        const matchingKey = Object.keys(orderItemState).find((key) => orderItemState[key] === value);
-        this.setDataValue('state', matchingKey);
-      }
-
+      defaultValue: 'ORDERED'
     },
     createdAt: {
       allowNull: false, // NOT NULL

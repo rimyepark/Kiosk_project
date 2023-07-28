@@ -4,7 +4,7 @@ class ItemsController {
     itemsService = new ItemsService();
 
   getItems = async (req, res, next) => {
-    const { type } = req.query;
+    const { optionId } = req.query;
     const Items = await this.itemsService.findAllItem();
     res.status(200).json({ data: Items })
   }
