@@ -17,16 +17,15 @@ class OrderItemsController {
   };
 
   updateOrderItem= async (req, res, next) => {
-    const { orderItemId } = req.params;
-    const {ItemId, amount, state } = req.body;
-    const updateOrderItem = await this.orderItemsService.updateOrderItem(
-        orderItemId,
-        ItemId, 
-        amount, 
-        state
-    );
+    const { orderItemId, ItemId } = req.params;
+    const { state, amount } = req.body;
+    try {
+    const updateOrderItem = await this.orderItemsService.updateOrderItem(orderItemId ,state, amount, ItemId,);
     res.status(200).json({ data: updateOrderItem });
-  };
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
   deleteOrderItem = async (req, res, next) => {
     const { orderItemId } = req.params;

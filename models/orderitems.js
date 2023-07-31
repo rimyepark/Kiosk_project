@@ -20,14 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  const orderItemState = {
-    "ORDERED": 0,
-    "PENDING": 1,
-    "COMPLETED": 2,
-    "CANCELED": 3
-  };  
-
-
   OrderItems.init({
     orderItemId: {
       allowNull: false,
