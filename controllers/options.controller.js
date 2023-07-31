@@ -3,6 +3,15 @@ const OptionsService = require('../services/options.service');
 class OptionsController {
     optionsService = new OptionsService();
 
+    cacheAllOptionsFromDB = async () => {
+      try {
+        await optionsService.cacheAllOptionsFromDB();
+      } catch (error) {
+        // Handle error
+        console.error('Failed to cache options from DB:', error);
+      }
+    };
+
     // 옵션 조회 api
   getOptions = async (req, res, next) => {
     const Options = await this.optionsService.findAllOption();

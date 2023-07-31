@@ -1,10 +1,9 @@
 const { Items } = require('../models');
 
 class itemRepository {
+  //아이템 생성 api
   findAllItem = async () => {
-
     const items = await Items.findAll();
-
     return items;
   }
 
@@ -29,6 +28,7 @@ class itemRepository {
 
     return updateItemData;
   };
+
 
   deleteItem = async (itemId) => {
     const deleteItemData = await Items.destroy({ where: { itemId } });

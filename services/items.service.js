@@ -51,6 +51,7 @@ class ItemsService {
     };
   }
 
+
   updateItem = async (itemId,name,OptionId,price,type,amount) => {
     const findItem = await this.ItemRepository.findItemById(itemId);
     if (!findItem) throw new Error("아이템을 찾지 못하였습니다.");
