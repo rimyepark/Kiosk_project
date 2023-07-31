@@ -1,11 +1,18 @@
+const { Options } = require('../models');
 const optionRepository = require('../repositories/options.repository');
+const NodeCache = require("node-cache");
+const optionCache = new NodeCache();
+
+const cacheOption = (option) => {
+  optionCache.set(option.id.toString(), option.toJSON());
+};
 
 class OptionsService {
 
     OptionRepository = new optionRepository();
 
-    //옵션 조회 api
     findAllOption = async() => { 
+      
     const allOption = await this.OptionRepository.findAllOption();
     return allOption.map(option => {
       return {
@@ -19,16 +26,30 @@ class OptionsService {
     });
   }
 
+  createOption = async (extraPrice, shotPrice, hot) => {
+    try {
+      // Option 모델에 해당하는 Sequelize 코드를 사용하여 데이터베이스에 옵션 생성
+      const option = await Option.create({ extraPrice, shotPrice, hot });
+
+      // 생성된 옵션 데이터를 캐시에 저장
+      cacheOption(option);
+
+      return option.toJSON();
+    } catch (error) {
+      throw error;
+    }
+  };
+
   //옵션 생성 api
-  createOption = async (extraPrice,shotPrice,hot) => {  
-   const CreateOptionData = await this.OptionRepository.createOption(extraPrice,shotPrice,hot);
-    return {
-      optionId: CreateOptionData.optionId,
-      extraPrice: CreateOptionData.extraPrice,
-      shotPrice: CreateOptionData.shotPrice,
-      hot: CreateOptionData.hot,
-    };
-  }
+  // createOption = async (extraPrice,shotPrice,hot) => {  
+  //  const CreateOptionData = await this.OptionRepository.createOption(extraPrice,shotPrice,hot);
+  //   return {
+  //     optionId: CreateOptionData.optionId,
+  //     extraPrice: CreateOptionData.extraPrice,
+  //     shotPrice: CreateOptionData.shotPrice,
+  //     hot: CreateOptionData.hot,
+  //   };
+  // }
 
   //옵션 수정 api
   updateOption = async (optionId, extraPrice,shotPrice,hot) => {
@@ -40,10 +61,10 @@ class OptionsService {
     const updateOption = await this.OptionRepository.findOptionById(optionId);
     
     return {
-      postId: updateOption.postId,
-      nickname: updateOption.nickname,
-      title: updateOption.title,
-      content: updateOption.content,
+      optionId: updateOption.optionId,
+      extraPrice: updateOption.extraPrice,
+      shotPrice: updateOption.shotPrice,
+      hot: updateOption.hot,
     };
   };
 

@@ -14,14 +14,19 @@ class OrderItemRepository {
     return orderItems;
   };
 
-  findItemAmount = async (itemId) => {
-    const item = await Items.findByPk(itemId);
-    if (!item) {
-      throw new Error("상품을 찾지 못하였습니다.");
-    }
-    return item.amount;
-  };
+  // findItemAmount = async (itemId) => {
+  //   const item = await Items.findByPk(itemId);
+  //   if (!item) {
+  //     throw new Error("상품을 찾지 못하였습니다.");
+  //   }
+  //   return item.amount;
+  // };
   
+  findItemById = async (itemId) => {
+    const items = await Items.findByPk(itemId);
+
+    return items;
+  };
 
   createOrderItem = async (ItemId, amount, state) => {
 
@@ -57,7 +62,7 @@ class OrderItemRepository {
   }
 
   return res.status(200).json({ message: "아이템 주문에 성공하셨습니다." });
-    }}
+    }
 
 
   deleteOrderItem= async (orderItemId) => {
@@ -65,6 +70,7 @@ class OrderItemRepository {
 
     return deleteOrderItemData;
   };
+}
 
 
 module.exports = OrderItemRepository;

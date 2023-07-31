@@ -68,11 +68,50 @@ class OrderItemService {
 // };
 // };
 
-updateOrderItem = async (orderItemId, ItemId, amount, state) => {
+// updateOrderItem = async (orderItemId, ItemId, amount, state) => {
+//   const findOrderItem = await this.orderItemRepository.findOrderItemById(orderItemId);
+//   if (!findOrderItem) {
+//     throw new Error("아이템을 찾지 못하였습니다.");
+//   }
+
+//   const orderItemState = {
+//     0: 'ORDERED',
+//     1: 'PENDING',
+//     2: 'COMPLETED',
+//     3: 'CANCELED'
+//   };
+
+//   const beforeState = findOrderItem.state;
+//   const afterState = orderItemState[state];
+
+//   // 주문 상태가 'PENDING'에서 'COMPLETED'로 변경되는 경우
+//   if (beforeState === 'PENDING' && afterState === 'COMPLETED') {
+//     const t = await sequelize.transaction();
+//     try {
+//       await this.orderItemRepository.updateOrderItem(orderItemId, ItemId, amount, state);
+//       const amount = await this.findItemById(findOrderItem.ItemId);
+//       await Items.update({ amount: amount + 1 }, { where: { itemId: findOrderItem.ItemId } });
+//       await t.commit();
+//     } catch (error) {
+//       await t.rollback();
+//       throw error;
+//     }
+//   }
+//   return {
+//     orderItemId: findOrderItem.orderItemId,
+//     ItemId: findOrderItem.ItemId,
+//     amount: await this.findItemById(findOrderItem.ItemId),
+//     state: afterState,
+//   };
+
+// }
+
+updateOrderItem = async (orderItemId, ItemId, amount, state ,itemId) => {
   const findOrderItem = await this.orderItemRepository.findOrderItemById(orderItemId);
   if (!findOrderItem) {
     throw new Error("아이템을 찾지 못하였습니다.");
   }
+  
 
   const orderItemState = {
     0: 'ORDERED',
@@ -88,9 +127,9 @@ updateOrderItem = async (orderItemId, ItemId, amount, state) => {
   if (beforeState === 'PENDING' && afterState === 'COMPLETED') {
     const t = await sequelize.transaction();
     try {
-      await this.orderItemRepository.updateOrderItem(orderItemId, ItemId, amount, state);
-      const amount = await this.findItemAmount(findOrderItem.ItemId);
-      await Items.update({ amount: amount + 1 }, { where: { itemId: findOrderItem.ItemId } });
+      await this.orderItemRepository.updateOrderItem(orderItemId, ItemId, amount, state );
+      const Itemamount = findItemById.amount;
+      await Items.update({ Itemamount: + amount }, { where: { itemId: findOrderItem.ItemId } });
       await t.commit();
     } catch (error) {
       await t.rollback();
@@ -100,10 +139,9 @@ updateOrderItem = async (orderItemId, ItemId, amount, state) => {
   return {
     orderItemId: findOrderItem.orderItemId,
     ItemId: findOrderItem.ItemId,
-    amount: await this.findItemAmount(findOrderItem.ItemId),
+    amount: findOrderItem.amount,
     state: afterState,
   };
-
 }
 
   deleteOrderItem = async (orderItemId) => {

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ItemOrderCustomers.init({
-    orderICid: {
+    orderICId: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
