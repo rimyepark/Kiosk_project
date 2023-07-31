@@ -3,6 +3,17 @@ const ItemsService = require('../services/items.service');
 class ItemsController {
     itemsService = new ItemsService();
 
+    findAllItem = async (req, res) => {
+      try {
+        const items = await itemsService.findAllItemsWithOptions();
+        res.json(items);
+      } catch (error) {
+        console.error('Failed to fetch items:', error);
+        res.status(500).json({ error: 'Failed to fetch items' });
+      }
+    };
+
+
   getItems = async (req, res, next) => {
     const { optionId } = req.query;
     const Items = await this.itemsService.findAllItem();

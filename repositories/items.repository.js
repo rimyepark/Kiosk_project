@@ -1,7 +1,21 @@
-const { Items } = require('../models');
+const {  Items, Options } = require('../models');
+const NodeCache = require('node-cache');
+const optionCache = new NodeCache({ stdTTL: 3600 });
 
 class itemRepository {
-  //아이템 생성 api
+
+  getItemOptions = async (itemId) => {
+    const cachedOptions = optionCache.get(itemId);
+    if (cachedOptions) {
+      return cachedOptions;
+    } else {
+      const options = await Options.findAll({ where: { itemId } });
+      optionCache.set(itemId, options);
+      return options;
+    }
+  };
+
+  //아이템 조회 api
   findAllItem = async () => {
     const items = await Items.findAll();
     return items;

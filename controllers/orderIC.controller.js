@@ -9,12 +9,17 @@ class OrderICController {
     res.status(200).json({ data: OrderIC })
   }
 
-  createOrderIC = async (req, res, next) => {
+  // 상품 주문 API 수정 - 주문 내용에 옵션 추가 및 전체 가격 계산
+  createOrderIC = async (req, res) => {
     const { ItemId, OrderCustomerId, amount, option, price } = req.body;
-    const createOrderICDate = await this.orderICService.createOrderIC(ItemId, OrderCustomerId, amount, option, price);
-
-    res.status(201).json({ data: createOrderICDate });
-  }
+    try {
+      const createOrderIC = await orderICService.createOrderIC(ItemId, OrderCustomerId, amount, option, price);
+      res.status(201).json(createOrderIC);
+    } catch (error) {
+      console.error('Failed to create orderIC:', error);
+      res.status(500).json({ error: 'Failed to create orderIC' });
+    }
+  };
 
   updateOrderIC = async (req, res, next) => {
     const { orderICId } = req.params;

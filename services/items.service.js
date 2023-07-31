@@ -2,6 +2,22 @@ const itemRepository = require('../repositories/items.repository');
 
 class ItemsService {
     ItemRepository = new itemRepository();
+
+    findAllItemsWithOptions = async () => {
+      const items = await ItemRepository.findAllItem();
+  
+      // Iterate through the items and get the options for each item
+      const itemsWithOptions = await Promise.all(
+        items.map(async (item) => {
+          const itemId = item.id;
+          const options = await ItemRepository.getItemOptions(itemId);
+          return { ...item.toJSON(), options: options };
+        })
+      );
+  
+      return itemsWithOptions;
+    };
+    
 // 'Coffee', 'ade','Tea', 'Cake', 'Cookie'
     findAllItem = async() => { 
       const type  = {
