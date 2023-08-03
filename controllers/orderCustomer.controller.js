@@ -4,16 +4,22 @@ class OrderCustomerController {
   orderCustomerService = new OrderCustomerService();
 
   getOrderCustomer = async (req, res, next) => {
-    const OrderCustomer = await this.orderCustomerService.findAllOrderCustomer();
-
-    res.status(200).json({ data: OrderCustomer })
+    try {
+      const orderCustomers = await this.orderCustomerService.findAllOrderCustomer();
+      res.status(200).json({ data: orderCustomers });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
 
   createOrderCustomer = async (req, res, next) => {
-    const { state } = req.body;
-    const createOrderCustomerDate = await this.orderCustomerService.createOrderCustomer(state);
-
-    res.status(201).json({ data: createOrderCustomerDate });
+    try {
+      const { state } = req.body;
+      const createOrderCustomerData = await this.orderCustomerService.createOrderCustomer(state);
+      res.status(201).json({ data: createOrderCustomerData });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
 
   updateOrderCustomer = async (req, res, next) => {
