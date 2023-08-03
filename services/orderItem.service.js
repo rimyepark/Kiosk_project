@@ -1,21 +1,20 @@
-const OrderCustomerRepository = require('../repositories/orderCustomers.repository');
-const { sequelize } = require('../models');
+const OrderItemRepository = require('../repositories/orderItem.repository');
 const { Transaction } = require("sequelize");
 
 class OrderItemService {
-    orderItemRepository = new OrderCustomerRepository();
+    orderItemRepository = new OrderItemRepository();
 
-    findAllOrderItem = async() => {   
-    const allOrderItem = await this.orderItemRepository.findAllOrderItem();
-    return allOrderItem.map(orderItem => {
-      return {
-        orderItemId: orderItem.orderItemId,
-        ItemId: orderItem.ItemId,
-        state: orderItem. state,
-        amount: orderItem.amount
-      }
-    });
-  }
+    findAllOrderItem = async () => {
+      const allOrderItem = await this.orderItemRepository.findAllOrderItem();
+      return allOrderItem.map(orderItem => {
+        return {
+          orderItemId: orderItem.orderItemId,
+          ItemId: orderItem.ItemId,
+          state: orderItem.state,
+          amount: orderItem.amount
+        };
+      });
+    }
 
   createOrderItem = async (ItemId, amount, state) => {
     const CreateOrderItemData = await this.orderItemRepository.createOrderItem(ItemId, amount, state);

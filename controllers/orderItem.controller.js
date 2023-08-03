@@ -4,10 +4,13 @@ class OrderItemsController {
     orderItemsService = new OrderItemService();
 
     getOrderItem = async (req, res, next) => {
-    const { itemId } = req.query;
-    const OrderItems = await this.orderItemsService.findAllOrderItem();
-    res.status(200).json({ data: OrderItems })
-  }
+      try {
+        const orderItems = await this.orderItemsService.findAllOrderItem();
+        res.status(200).json({ data: orderItems });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    }
 
   createOrderItem = async (req, res, next) => {
     const {  ItemId, amount, state } = req.body;

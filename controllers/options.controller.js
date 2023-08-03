@@ -21,11 +21,14 @@ class OptionsController {
 
 // 옵션 생성 api
 createOption = async (req, res, next) => {
-    const { extraPrice,shotPrice,hot } = req.body;
-    const createOptionDate = await this.optionsService.createOption(extraPrice,shotPrice,hot);
-
-    res.status(201).json({ data: createOptionDate });
+  const { extraPrice, shotPrice, hot } = req.body;
+  try {
+    const createOptionData = await this.optionsService.createOption(extraPrice, shotPrice, hot);
+    res.status(201).json({ data: JSON.parse(createOptionData) });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
   //옵션 수정 api
   updateOption = async (req, res, next) => {

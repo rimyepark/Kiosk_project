@@ -3,8 +3,11 @@ const NodeCache = require("node-cache");
 const optionCache = new NodeCache();
 
 const cacheOption = (option) => {
-  optionCache.set(option.id.toString(), option.toJSON());
+  if (option.id) {
+    optionCache.set(option.id.toString(), JSON.stringify(option));
+  }
 };
+
 
 
 class optionRepository {
@@ -14,10 +17,12 @@ class optionRepository {
    cacheAllOptionsFromDB = async () => {
     try {
       const optionsFromDB = await Options.findAll();
-
+  
       // 가져온 option 데이터를 메모리에 캐싱
       optionsFromDB.forEach((option) => {
-        cacheOption(option);
+        if (option.id) { // option.id가 정의된 경우에만 cacheOption 호출
+          cacheOption(option);
+        }
       });
     } catch (error) {
       throw error;
@@ -43,15 +48,22 @@ class optionRepository {
   // }
 
  // 옵션 생성
-  createOption = async (extraPrice, shotPrice, hot) => {
-    try {
-      const option = await Options.create({ extraPrice, shotPrice, hot });
-      cacheOption(option);
-      return option.toJSON();
-    } catch (error) {
-      throw error;
-    }
-  };
+createOption = async (extraPrice, shotPrice, hot) => {
+  try {
+    const option = await Options.create({ extraPrice, shotPrice, hot });
+    cacheOption(option.toJSON());
+    return {
+      optionId: option.optionId,
+      extraPrice: option.extraPrice,
+      shotPrice: option.shotPrice,
+      hot: JSON.stringify(option.hot), // 불리언 값도 JSON 문자열로 변환
+      createdAt: option.createdAt.toJSON(), // createdAt도 JSON 문자열로 변환
+      updatedAt: option.updatedAt.toJSON(), // updatedAt도 JSON 문자열로 변환
+    };
+  } catch (error) {
+    throw error;
+  }
+};
 
  //옵션 수정
   // updateOption = async (optionId, extraPrice,shotPrice,hot) => {
@@ -75,8 +87,15 @@ class optionRepository {
       cacheOption(updatedOption.toJSON());
     }
 
-    return updateOptionData;
-  };
+    return {
+      optionId: updateOptionData.optionId,
+      extraPrice: updateOptionData.extraPrice,
+      shotPrice: updateOptionData.shotPrice,
+      hot: JSON.stringify(updateOptionData.hot), // 불리언 값도 JSON 문자열로 변환
+      createdAt: updateOptionData.createdAt.toJSON(), // createdAt도 JSON 문자열로 변환
+      updatedAt: updateOptionData.updatedAt.toJSON(), // updatedAt도 JSON 문자열로 변환
+    };
+  }
   
   //옵션 삭제
   // deleteOption = async (optionId) => {

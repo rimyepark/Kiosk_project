@@ -1,4 +1,5 @@
 const { OrderItems, Items , sequelize} = require('../models');
+const { Transaction } = require("sequelize");
 
 const orderItemState = {
   0: 'ORDERED',
@@ -9,9 +10,7 @@ const orderItemState = {
 
 class OrderItemRepository {
   findAllOrderItem = async () => {
-
     const orderItems = await OrderItems.findAll();
-
     return orderItems;
   }
 
@@ -73,7 +72,7 @@ class OrderItemRepository {
         const newAmount = item.amount + orderItem.amount;
         await Items.update(
           { amount: newAmount },
-          { where: { id: payload.itemId }, transaction: t }
+          { where: { id: payload.ItemId }, transaction: t }
         );
   
         await t.commit();
