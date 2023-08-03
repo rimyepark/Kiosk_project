@@ -1,8 +1,12 @@
 const OrderCustomerRepository = require('../repositories/orderCustomers.repository');
+const OrderICRepository = require('../repositories/orderICs.repository');
+const itemRepository = require('../repositories/items.repository');
 
 class OrderCustomerService {
 
   orderCustomerRepository = new OrderCustomerRepository();
+  itemOrderCustomerRepository = new OrderICRepository();
+  itemsRepository = new itemRepository();
 
   findAllOrderCustomer = async () => {
     const allOrderCustomer = await this.orderCustomerRepository.findAllOrderCustomer();
@@ -36,16 +40,24 @@ class OrderCustomerService {
     };
   };
 
+  updateAmount = async (orderICId, orderCustomerId) => {
+    return this.orderCustomerRepository.updateAmount(orderICId, orderCustomerId);
+  };
+
+  // deleteOrderCustomer = async (orderCustomerId) => {
+  //   const findOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
+  //   if (!findOrderCustomer) throw new Error("옵션을 찾을 수 없습니다.");
+    
+  //   await this.orderCustomerRepository.deleteOrderCustomer(orderCustomerId);
+    
+  //   return {
+  //     orderCustomerId: findOrderCustomer.orderCustomerId,
+  //     state: findOrderCustomer.state,
+  //   };
+  // };
+
   deleteOrderCustomer = async (orderCustomerId) => {
-    const findOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
-    if (!findOrderCustomer) throw new Error("옵션을 찾을 수 없습니다.");
-    
-    await this.orderCustomerRepository.deleteOrderCustomer(orderCustomerId);
-    
-    return {
-      orderCustomerId: findOrderCustomer.orderCustomerId,
-      state: findOrderCustomer.state,
-    };
+    return this.orderCustomerRepository.deleteOrderCustomer(orderCustomerId);
   };
 }
 

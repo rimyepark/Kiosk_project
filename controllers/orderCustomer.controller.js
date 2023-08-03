@@ -34,12 +34,32 @@ class OrderCustomerController {
     res.status(200).json({ data: updateOrderCustomer});
   };
 
-//옵션 삭제 api
-  deleteOrderCustomer = async (req, res, next) => {
-    const { orderCustomerId } = req.params;
-    const deleteOrderCustomer = await this.orderCustomerService.deleteOrderCustomer(orderCustomerId);
+  updateAmount = async (req, res, next) => {
+    try {
+      const { orderICId, orderCustomerId } = req.params;
+      const result = await this.orderCustomerService.updateAmount(orderICId, orderCustomerId);
+      res.status(result.code).json({ message: result.message });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
 
-    res.status(200).json({ data: deleteOrderCustomer });
+//옵션 삭제 api
+  // deleteOrderCustomer = async (req, res, next) => {
+  //   const { orderCustomerId } = req.params;
+  //   const deleteOrderCustomer = await this.orderCustomerService.deleteOrderCustomer(orderCustomerId);
+
+  //   res.status(200).json({ data: deleteOrderCustomer });
+  // };
+
+  deleteOrderCustomer = async (req, res, next) => {
+    try {
+      const { orderCustomerId } = req.params;
+      const result = await this.orderCustomerService.deleteOrderCustomer(orderCustomerId);
+      res.status(result.code).json({ message: result.message });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   };
 }
 
