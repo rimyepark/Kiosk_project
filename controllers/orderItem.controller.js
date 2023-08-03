@@ -16,16 +16,30 @@ class OrderItemsController {
     res.status(201).json({ data: createOrderItemDate });
   };
 
-  updateOrderItem= async (req, res, next) => {
-    const { orderItemId, ItemId } = req.params;
-    const { state, amount } = req.body;
-    try {
-    const updateOrderItem = await this.orderItemsService.updateOrderItem(orderItemId ,state, amount, ItemId,);
-    res.status(200).json({ data: updateOrderItem });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//   updateOrderItem= async (req, res, next) => {
+//     const { orderItemId, ItemId } = req.params;
+//     const { state, amount } = req.body;
+//     try {
+//     const updateOrderItem = await this.orderItemsService.updateOrderItem(orderItemId ,state, amount, ItemId,);
+//     res.status(200).json({ data: updateOrderItem });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+updateOrderItem = async (req, res) => {
+  const { orderItemId, itemId, state } = req.body;
+
+  const payload = {
+    orderItemId,
+    itemId,
+    state,
+  };
+
+  const result = await this.orderItemsService.updateOrderItem(payload);
+
+  return res.status(result.code).json(result);
+}
 
   deleteOrderItem = async (req, res, next) => {
     const { orderItemId } = req.params;

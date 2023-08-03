@@ -1,9 +1,9 @@
-const OrderItemRepository = require('../repositories/orderItem.repository');
+const OrderCustomerRepository = require('../repositories/orderCustomers.repository');
 const { sequelize } = require('../models');
 const { Transaction } = require("sequelize");
 
 class OrderItemService {
-    orderItemRepository = new OrderItemRepository();
+    orderItemRepository = new OrderCustomerRepository();
 
     findAllOrderItem = async() => {   
     const allOrderItem = await this.orderItemRepository.findAllOrderItem();
@@ -106,45 +106,20 @@ class OrderItemService {
 
 // }
 
-updateOrderItem = async (orderItemId, ItemId, amount, state ,itemId) => {
-  const findOrderItem = await this.orderItemRepository.findOrderItemById(orderItemId);
-  if (!findOrderItem) {
-    throw new Error("아이템을 찾지 못하였습니다.");
-  }
-  
-
-  const orderItemState = {
-    0: 'ORDERED',
-    1: 'PENDING',
-    2: 'COMPLETED',
-    3: 'CANCELED'
-  };
-
-  const beforeState = findOrderItem.state;
-  const afterState = orderItemState[state];
-
-  // 주문 상태가 'PENDING'에서 'COMPLETED'로 변경되는 경우
-  if (beforeState === 'PENDING' && afterState === 'COMPLETED') {
-    const t = await sequelize.transaction();
+updateOrderItem =   async(payload) =>{
     try {
-      await this.orderItemRepository.updateOrderItem(orderItemId, ItemId, amount, state );
-      const Itemamount = findItemById.amount;
-      await Items.update({ Itemamount: + amount }, { where: { itemId: findOrderItem.ItemId } });
-      await t.commit();
+      const result = await this.orderItemRepository.updateOrderItem(payload);
+      return result;
     } catch (error) {
-      await t.rollback();
-      throw error;
+      return {
+        code: 500,
+        message: '에러가 발생했습니다.',
+        error: error.message,
+      };
     }
   }
-  return {
-    orderItemId: findOrderItem.orderItemId,
-    ItemId: findOrderItem.ItemId,
-    amount: findOrderItem.amount,
-    state: afterState,
-  };
-}
 
-  deleteOrderItem = async (orderItemId) => {
+deleteOrderItem = async (orderItemId) => {
     const findOrderItem = await this.orderItemRepository.findOrderItemById(orderItemId);
   
     if (!findOrderItem) {
