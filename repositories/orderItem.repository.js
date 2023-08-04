@@ -39,13 +39,9 @@ class OrderItemRepository {
     const t = await sequelize.transaction({
       isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED,
     });
+    console.log(payload);
   
     try {
-      // payload에 정의된 필드들이 모두 유효한지 확인
-      // if (!payload.amount || !payload.state || !payload.ItemId) {
-      //   throw new Error('필수 입력값이 누락되었습니다.');
-      // }
-  
       const orderItem = await OrderItems.findOne({ where: { orderItemId: payload.orderItemId } });
       if (!orderItem) {
         throw new Error('주문 아이템이 존재하지 않습니다.');
@@ -56,10 +52,9 @@ class OrderItemRepository {
         throw new Error('유효하지 않은 상태 코드입니다.');
       }
   
-      // 'PENDING' → 'COMPLETED' 상태로 변경될 때
       if (payload.state === 1 && orderItem.state !== 2) {
         const updatedOrderItem = await OrderItems.update(
-          { state: newState }, // 상태 코드를 문자열로 변경
+          { state: newState },
           { where: { orderItemId: payload.orderItemId }, transaction: t }
         );
   
@@ -67,7 +62,7 @@ class OrderItemRepository {
           throw new Error('상품 주문에 실패했습니다.');
         }
   
-        const item = await Items.findByPk(payload.itemId, { transaction: t });
+        const item = await Items.findByPk(payload.ItemId, { transaction: t });
   
         if (!item) {
           throw new Error('상품을 찾지 못했습니다.');
@@ -87,9 +82,9 @@ class OrderItemRepository {
         };
       }
   
-      // 발주완료된거 취소하거나 보류 주문상태로 되돌리기
+      // 발주완료된 거 취소하거나 보류 주문 상태로 되돌리기
       if (payload.state === 2 && orderItem.state !== 2) {
-        const item = await Items.findByPk(payload.itemId, { transaction: t });
+        const item = await Items.findByPk(payload.ItemId, { transaction: t });
   
         if (!item) {
           throw new Error('상품을 찾지 못했습니다.');
@@ -102,11 +97,11 @@ class OrderItemRepository {
         const newAmount = item.amount - orderItem.amount;
         await Items.update(
           { amount: newAmount },
-          { where: { itemId: payload.itemId }, transaction: t }
+          { where: { ItemId: payload.ItemId }, transaction: t }
         );
   
         await OrderItems.update(
-          { state: newState }, // 상태 코드를 문자열로 변경
+          { state: newState },
           { where: { orderItemId: payload.orderItemId }, transaction: t }
         );
   
@@ -118,7 +113,7 @@ class OrderItemRepository {
         };
       }
   
-      // 다른 경우는 발주상태만 변경
+      // 다른 경우는 발주 상태만 변경
       await OrderItems.update({ state: newState }, { where: { orderItemId: payload.orderItemId }, transaction: t });
   
       await t.commit();
@@ -136,6 +131,7 @@ class OrderItemRepository {
       };
     }
   };
+  
 
 
   deleteOrderItem= async (orderItemId) => {

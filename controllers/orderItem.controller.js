@@ -31,11 +31,12 @@ class OrderItemsController {
 // };
 
 updateOrderItem = async (req, res) => {
-  const { orderItemId, itemId, state } = req.body;
+  const { orderItemId, ItemId, amount, state } = req.body; // orderItemId 추가
 
   const payload = {
-    orderItemId,
-    itemId,
+    orderItemId, // orderItemId 추가
+    ItemId,
+    amount,
     state,
   };
 
