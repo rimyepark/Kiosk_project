@@ -1,4 +1,5 @@
 const { OrderCustomers, ItemOrderCustomers, Items, sequelize } = require('../models');
+const { Transaction } = require("sequelize");
 
 class OrderCustomerRepository {
   findAllOrderCustomer = async () => {
@@ -29,51 +30,66 @@ class OrderCustomerRepository {
     return createOrderCustomer;
   }
 
-  updateOrderCustomer = async (orderCustomerId, state) => {
-    const updateOrderCustomerData = await OrderCustomers.update(
-      { state },
-      { where: { orderCustomerId } }
-    );
-    return updateOrderCustomerData;
-  };
+  // updateOrderCustomer = async (orderCustomerId, state) => {
+  //   const updateOrderCustomerData = await OrderCustomers.update(
+  //     { state },
+  //     { where: { orderCustomerId } }
+  //   );
+  //   return updateOrderCustomerData;
+  // };
 
-  updateAmount = async (orderICId, orderCustomerId) => {
-    const t = await sequelize.transaction();
-
+  updateOrderCustomer = async (payload) => {
+    const t = await sequelize.transaction({
+      isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED,
+    });
+  
     try {
-      // ItemOrderCustomers에서 주문을 찾아 옵니다.
-      const orderIC = await this.finorderICById(orderICId);
-      if (!orderIC) {
-        throw new Error('주문을 찾지 못했습니다.');
+      const updateOrderCustomer = await OrderCustomers.findOne({ where: { orderCustomerId: payload.orderCustomerId } });
+      if (!updateOrderCustomer) {
+        throw new Error('주문 고객이 존재하지 않습니다.');
       }
-
-      // OrderCustomers의 state를 true로 업데이트합니다.
-      const updateOrderCustomerData = await this.updateOrderCustomer(orderCustomerId, true);
-      if (updateOrderCustomerData[0] === 0) {
-        throw new Error('주문자 상태 업데이트에 실패했습니다.');
+  
+      if (payload.state === false && updateOrderCustomer.state === true) {
+        const itemOrderCustomer = await ItemOrderCustomers.findOne({ where: { OrderCustomerId: payload.orderCustomerId }, transaction: t });
+        if (!itemOrderCustomer) {
+          throw new Error('주문 아이템이 존재하지 않습니다.');
+        }
+  
+        const item = await Items.findByPk(itemOrderCustomer.ItemId, { transaction: t });
+        if (!item) {
+          throw new Error('상품을 찾지 못했습니다.');
+        }
+  
+        const newAmount = item.amount - itemOrderCustomer.amount;
+        await Items.update(
+          { amount: newAmount },
+          { where: { ItemId: itemOrderCustomer.ItemId }, transaction: t }
+        );
+  
+        await ItemOrderCustomers.update(
+          { state: payload.state },
+          { where: { OrderCustomerId: payload.orderCustomerId }, transaction: t }
+        );
+  
+        await t.commit();
+  
+        return {
+          code: 200,
+          message: '주문을 수정했습니다.',
+        };
       }
-
-      // Items에서 상품을 찾아 amount를 조정합니다.
-      const item = await this.findItemById(orderIC.ItemId);
-      if (!item) {
-        throw new Error('상품을 찾지 못했습니다.');
-      }
-
-      const newAmount = item.amount - orderIC.amount;
-      if (newAmount < 0) {
-        throw new Error('상품의 재고가 부족합니다.');
-      }
-
-      await Items.update(
-        { amount: newAmount },
-        { where: { id: orderIC.ItemId }, transaction: t }
+  
+      // 다른 경우는 주문 상태만 변경
+      await OrderCustomers.update(
+        { state: payload.state },
+        { where: { orderCustomerId: payload.orderCustomerId }, transaction: t }
       );
-
+  
       await t.commit();
-
+  
       return {
         code: 200,
-        message: '주문 완료 처리 및 재고 조정이 완료되었습니다.',
+        message: '주문 상태가 변경되었습니다.',
       };
     } catch (error) {
       await t.rollback();

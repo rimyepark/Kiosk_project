@@ -26,23 +26,32 @@ class OrderCustomerService {
     };
   }
 
-  updateOrderCustomer = async (orderCustomerId, state) => {
-    const findOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
-    if (!findOrderCustomer) throw new Error("옵션을 찾지 못하였습니다.");
+  // updateOrderCustomer = async (orderCustomerId, state) => {
+  //   const findOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
+  //   if (!findOrderCustomer) throw new Error("옵션을 찾지 못하였습니다.");
     
-    await this.orderCustomerRepository.updateOrderCustomer(orderCustomerId,state);
+  //   await this.orderCustomerRepository.updateOrderCustomer(orderCustomerId,state);
     
-    const updateOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
+  //   const updateOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
     
-    return {
-      orderCustomerId: updateOrderCustomer.orderCustomerId,
-      state: updateOrderCustomer.state,
-    };
-  };
+  //   return {
+  //     orderCustomerId: updateOrderCustomer.orderCustomerId,
+  //     state: updateOrderCustomer.state,
+  //   };
+  // };
 
-  updateAmount = async (orderICId, orderCustomerId) => {
-    return this.orderCustomerRepository.updateAmount(orderICId, orderCustomerId);
-  };
+  updateOrderCustomer = async (payload) => {
+    try {
+      const result = await this.orderCustomerRepository.updateOrderCustomer(payload);
+      return result;
+    } catch (error) {
+      return {
+        code: 500,
+        message: '에러가 발생했습니다.',
+        error: error.message,
+      };
+    }
+  }
 
   // deleteOrderCustomer = async (orderCustomerId) => {
   //   const findOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);

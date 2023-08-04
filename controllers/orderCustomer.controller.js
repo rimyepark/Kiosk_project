@@ -22,29 +22,34 @@ class OrderCustomerController {
     }
   }
 
-  updateOrderCustomer = async (req, res, next) => {
-    const { orderCustomerId } = req.params;
-    const { state } = req.body;
+  // updateOrderCustomer = async (req, res, next) => {
+  //   const { orderCustomerId } = req.params;
+  //   const { state } = req.body;
 
-    const updateOrderCustomer = await this.orderCustomerService.updateOrderCustomer(
+  //   const updateOrderCustomer = await this.orderCustomerService.updateOrderCustomer(
+  //     orderCustomerId,
+  //     state
+  //   );
+
+  //   res.status(200).json({ data: updateOrderCustomer});
+  // };
+
+  updateOrderCustomer = async (req, res) => {
+    const { orderCustomerId, orderICId, ItemId, state } = req.body;
+
+    const payload = {
       orderCustomerId,
-      state
-    );
+      orderICId,
+      ItemId,
+      state,
+    };
 
-    res.status(200).json({ data: updateOrderCustomer});
-  };
+    const result = await this.orderCustomerService.updateOrderCustomer(payload);
 
-  updateAmount = async (req, res, next) => {
-    try {
-      const { orderICId, orderCustomerId } = req.params;
-      const result = await this.orderCustomerService.updateAmount(orderICId, orderCustomerId);
-      res.status(result.code).json({ message: result.message });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
+    return res.status(result.code).json(result);
+  }
 
-//옵션 삭제 api
+
   // deleteOrderCustomer = async (req, res, next) => {
   //   const { orderCustomerId } = req.params;
   //   const deleteOrderCustomer = await this.orderCustomerService.deleteOrderCustomer(orderCustomerId);
