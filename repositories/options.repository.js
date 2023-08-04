@@ -41,12 +41,6 @@ class optionRepository {
     return options;
   };
 
-  //옵션 생성
-  // createOption = async (extraPrice,shotPrice,hot) => {
-  //   const createOption = await Options.create({ extraPrice,shotPrice,hot });
-  //   return createOption;
-  // }
-
  // 옵션 생성
 createOption = async (extraPrice, shotPrice, hot) => {
   try {
@@ -64,16 +58,6 @@ createOption = async (extraPrice, shotPrice, hot) => {
     throw error;
   }
 };
-
- //옵션 수정
-  // updateOption = async (optionId, extraPrice,shotPrice,hot) => {
-  //   const updateOptionData = await Options.update(
-  //     { extraPrice,shotPrice,hot },
-  //     { where: { optionId } }
-  //   );
-
-  //   return updateOptionData;
-  // };
 
   updateOption = async (optionId, extraPrice, shotPrice, hot) => {
     try {

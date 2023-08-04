@@ -117,7 +117,6 @@ class OrderCustomerRepository {
         message: '주문이 취소되었습니다.',
       };
     } catch (error) {
-      console.log(error);
       await t.rollback();
       return {
         code: 500,
