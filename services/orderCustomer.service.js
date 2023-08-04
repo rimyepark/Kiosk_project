@@ -53,18 +53,6 @@ class OrderCustomerService {
     }
   }
 
-  // deleteOrderCustomer = async (orderCustomerId) => {
-  //   const findOrderCustomer = await this.orderCustomerRepository.findOrderCustomerById(orderCustomerId);
-  //   if (!findOrderCustomer) throw new Error("옵션을 찾을 수 없습니다.");
-    
-  //   await this.orderCustomerRepository.deleteOrderCustomer(orderCustomerId);
-    
-  //   return {
-  //     orderCustomerId: findOrderCustomer.orderCustomerId,
-  //     state: findOrderCustomer.state,
-  //   };
-  // };
-
   deleteOrderCustomer = async (orderCustomerId) => {
     return this.orderCustomerRepository.deleteOrderCustomer(orderCustomerId);
   };

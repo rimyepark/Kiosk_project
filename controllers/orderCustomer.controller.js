@@ -22,18 +22,6 @@ class OrderCustomerController {
     }
   }
 
-  // updateOrderCustomer = async (req, res, next) => {
-  //   const { orderCustomerId } = req.params;
-  //   const { state } = req.body;
-
-  //   const updateOrderCustomer = await this.orderCustomerService.updateOrderCustomer(
-  //     orderCustomerId,
-  //     state
-  //   );
-
-  //   res.status(200).json({ data: updateOrderCustomer});
-  // };
-
   updateOrderCustomer = async (req, res) => {
     const { orderCustomerId, orderICId, ItemId, state } = req.body;
 
@@ -48,14 +36,6 @@ class OrderCustomerController {
 
     return res.status(result.code).json(result);
   }
-
-
-  // deleteOrderCustomer = async (req, res, next) => {
-  //   const { orderCustomerId } = req.params;
-  //   const deleteOrderCustomer = await this.orderCustomerService.deleteOrderCustomer(orderCustomerId);
-
-  //   res.status(200).json({ data: deleteOrderCustomer });
-  // };
 
   deleteOrderCustomer = async (req, res, next) => {
     try {

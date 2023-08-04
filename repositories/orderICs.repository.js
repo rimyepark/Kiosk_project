@@ -17,13 +17,6 @@ class OrderICRepository {
     return orderICs;
   };
 
-//   createOrderIC = async (ItemId, OrderCustomerId, amount, option, price) => {
-
-//     const createOrderIC = await ItemOrderCustomers.create(ItemId, OrderCustomerId, amount, option, price);
-
-//     return createOrderIC;
-//   }
-
 createOrderIC = async (ItemId, OrderCustomerId, amount, option, price) => {
     // 옵션을 포함한 총 가격 계산
     const optionPrice = await this.calculateOptionPrice(ItemId, option);

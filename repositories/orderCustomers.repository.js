@@ -30,14 +30,6 @@ class OrderCustomerRepository {
     return createOrderCustomer;
   }
 
-  // updateOrderCustomer = async (orderCustomerId, state) => {
-  //   const updateOrderCustomerData = await OrderCustomers.update(
-  //     { state },
-  //     { where: { orderCustomerId } }
-  //   );
-  //   return updateOrderCustomerData;
-  // };
-
   updateOrderCustomer = async (payload) => {
     const t = await sequelize.transaction({
       isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED,
@@ -100,11 +92,6 @@ class OrderCustomerRepository {
       };
     }
   };
-
-  // deleteOrderCustomer = async (orderCustomerId) => {
-  //   const deleteOrderCustomerData = await OrderCustomers.destroy({ where: { orderCustomerId } });
-  //   return deleteOrderCustomerData;
-  // };
 
   //ordercustomer 데이터, itemordercustomer 데이터 `트랜잭션` 을 적용해 일괄 삭제
   deleteOrderCustomer = async (orderCustomerId) => {

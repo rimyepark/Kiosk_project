@@ -103,13 +103,6 @@ createOption = async (extraPrice, shotPrice, hot) => {
       throw error;
     }
   }
-  
-  //옵션 삭제
-  // deleteOption = async (optionId) => {
-  //   const deleteOptionData = await Options.destroy({ where: { optionId } });
-
-  //   return deleteOptionData;
-  // };
 
   deleteOption = async (optionId) => {
     try {
