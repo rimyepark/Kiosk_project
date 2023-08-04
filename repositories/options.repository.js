@@ -76,25 +76,32 @@ createOption = async (extraPrice, shotPrice, hot) => {
   // };
 
   updateOption = async (optionId, extraPrice, shotPrice, hot) => {
-    const updateOptionData = await Options.update(
-      { extraPrice, shotPrice, hot },
-      { where: { id: optionId } }
-    );
-
-    if (updateOptionData[0] > 0) {
-      // 업데이트된 데이터를 찾아 캐시에 업데이트
-      const updatedOption = await Options.findByPk(optionId);
-      cacheOption(updatedOption.toJSON());
+    try {
+      const [rowsAffected] = await Options.update(
+        { extraPrice, shotPrice, hot },
+        { where: { optionId } }
+      );
+  
+      if (rowsAffected > 0) {
+        // 업데이트된 데이터를 찾아 캐시에 업데이트
+        const updatedOption = await Options.findByPk(optionId);
+        if (updatedOption) {
+          cacheOption(updatedOption.toJSON());
+          return {
+            optionId: updatedOption.optionId,
+            extraPrice: updatedOption.extraPrice,
+            shotPrice: updatedOption.shotPrice,
+            hot: JSON.stringify(updatedOption.hot),
+            createdAt: updatedOption.createdAt.toJSON(),
+            updatedAt: updatedOption.updatedAt.toJSON(),
+          };
+        }
+      }
+  
+      return null; // 업데이트된 데이터가 없으면 null 반환
+    } catch (error) {
+      throw error;
     }
-
-    return {
-      optionId: updateOptionData.optionId,
-      extraPrice: updateOptionData.extraPrice,
-      shotPrice: updateOptionData.shotPrice,
-      hot: JSON.stringify(updateOptionData.hot), // 불리언 값도 JSON 문자열로 변환
-      createdAt: updateOptionData.createdAt.toJSON(), // createdAt도 JSON 문자열로 변환
-      updatedAt: updateOptionData.updatedAt.toJSON(), // updatedAt도 JSON 문자열로 변환
-    };
   }
   
   //옵션 삭제

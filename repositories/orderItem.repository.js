@@ -41,12 +41,16 @@ class OrderItemRepository {
     });
   
     try {
-      const orderItem = await OrderItems.findOne({ where: { id: payload.orderItemId } });
+      // payload에 정의된 필드들이 모두 유효한지 확인
+      // if (!payload.amount || !payload.state || !payload.ItemId) {
+      //   throw new Error('필수 입력값이 누락되었습니다.');
+      // }
+  
+      const orderItem = await OrderItems.findOne({ where: { orderItemId: payload.orderItemId } });
       if (!orderItem) {
         throw new Error('주문 아이템이 존재하지 않습니다.');
       }
   
-      // 숫자로 입력된 상태 코드를 문자열로 변환
       const newState = orderItemState[payload.state];
       if (!newState) {
         throw new Error('유효하지 않은 상태 코드입니다.');
@@ -56,7 +60,7 @@ class OrderItemRepository {
       if (payload.state === 1 && orderItem.state !== 2) {
         const updatedOrderItem = await OrderItems.update(
           { state: newState }, // 상태 코드를 문자열로 변경
-          { where: { id: payload.orderItemId }, transaction: t }
+          { where: { orderItemId: payload.orderItemId }, transaction: t }
         );
   
         if (updatedOrderItem[0] === 0) {
@@ -72,7 +76,7 @@ class OrderItemRepository {
         const newAmount = item.amount + orderItem.amount;
         await Items.update(
           { amount: newAmount },
-          { where: { id: payload.ItemId }, transaction: t }
+          { where: { ItemId: payload.ItemId }, transaction: t }
         );
   
         await t.commit();
@@ -98,12 +102,12 @@ class OrderItemRepository {
         const newAmount = item.amount - orderItem.amount;
         await Items.update(
           { amount: newAmount },
-          { where: { id: payload.itemId }, transaction: t }
+          { where: { itemId: payload.itemId }, transaction: t }
         );
   
         await OrderItems.update(
           { state: newState }, // 상태 코드를 문자열로 변경
-          { where: { id: payload.orderItemId }, transaction: t }
+          { where: { orderItemId: payload.orderItemId }, transaction: t }
         );
   
         await t.commit();
@@ -115,7 +119,7 @@ class OrderItemRepository {
       }
   
       // 다른 경우는 발주상태만 변경
-      await OrderItems.update({ state: newState }, { where: { id: payload.orderItemId }, transaction: t });
+      await OrderItems.update({ state: newState }, { where: { orderItemId: payload.orderItemId }, transaction: t });
   
       await t.commit();
   
